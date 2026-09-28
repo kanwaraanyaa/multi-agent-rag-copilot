@@ -1,0 +1,38 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Environment
+.env
+.env.*
+
+# Node
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Logs
+*.log
+
+# Large ML files
+*.pkl
+*.pt
+*.pth
+*.onnx
+
+# Test / uploaded images
+data/*.jpg
+data/*.jpeg
+data/*.png
+
+# Generated vector indexes
+vector_db/*.index
+vector_db/*.faiss
