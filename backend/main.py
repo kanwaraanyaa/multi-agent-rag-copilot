@@ -1,10 +1,16 @@
 import os
 import shutil
 import tempfile
-
+from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import List, Any
 from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+# Your existing imports continue below:
 from agents.agent_pipeline import run_pipeline
 
 
@@ -126,3 +132,30 @@ async def analyze_case(
         if image_path and os.path.exists(image_path):
 
             os.remove(image_path)
+
+
+# Ensure app is initialized (if not already present at top of main.py)
+# app = FastAPI()
+
+# 1. Define the Pydantic data model for the chat request
+class ChatRequest(BaseModel):
+    question: str
+    initial_question: str
+    findings: List[Any]
+    synthesis: str
+    history: List[Any]
+
+# 2. Add the /chat endpoint route
+@app.post("/chat")
+async def clinical_chat(req: ChatRequest):
+    # Construct context from initial case analysis
+    context_summary = f"Case Question: {req.initial_question}\nFindings: {req.findings}"
+    
+    # Example logic: replace this with your LLM / Synthesis Agent invocation
+    reply = (
+        f"Regarding '{req.question}': Based on the case findings "
+        f"({len(req.findings)} detected abnormal region(s)), clinicians should correlate "
+        f"with patient history, order targeted inflammatory panels, or perform a lateral chest X-ray view."
+    )
+    
+    return {"reply": reply}            
